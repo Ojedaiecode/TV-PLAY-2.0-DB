@@ -1,0 +1,1 @@
+// Arquivo preparado para futuras implementações 
