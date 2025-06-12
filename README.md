@@ -30,4 +30,14 @@ Estas adições fazem parte da estrutura base que será exibida no deploy inicia
 
 ---
 
-> **Observação:** Este projeto está pronto para ser implantado no Railway e não será executado localmente durante o desenvolvimento inicial. 
+> **Observação:** Este projeto está pronto para ser implantado no Railway e não será executado localmente durante o desenvolvimento inicial.
+
+## Deploy (Railway)
+
+Este projeto está configurado para ser implantado no Railway utilizando um arquivo `Procfile` com o seguinte comando:
+
+```
+web: python run.py
+```
+
+Esse comando garante que a aplicação Flask será iniciada corretamente após o deploy. 
