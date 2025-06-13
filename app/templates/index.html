@@ -8,7 +8,29 @@
 </head>
 <body>
     <main class="container">
-        <!-- Container principal - elementos serão adicionados aqui -->
+        <!-- Container de login -->
+        <div class="login-container">
+            <div class="avatar-container">
+                <div class="avatar-circle"></div>
+                <span class="edit-text">Editar</span>
+            </div>
+            
+            <form class="login-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" placeholder="Senha" required>
+                </div>
+                
+                <button type="submit" class="login-button">ENTRAR</button>
+            </form>
+        </div>
     </main>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
