@@ -14,11 +14,16 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="avatar">
-                    <img src="#" alt="CEO - OJED">
+                    <img src="{{ session.user.avatar_url or 'https://cdn.tvplaydastorcidas.com/logo-tv-play-00.png' }}" 
+                         alt="Avatar do usuário" 
+                         id="userAvatar">
+                    <form id="avatarForm" style="display: none;">
+                        <input type="file" id="avatarInput" name="avatar" accept=".png,.jpg,.jpeg">
+                    </form>
                 </div>
                 <div class="user-info">
-                    <h3>CEO - OJED</h3>
-                    <p>Editar nome</p>
+                    <h3>{{ session.user.nome }}</h3>
+                    <p onclick="document.getElementById('avatarInput').click()">Editar</p>
                 </div>
             </div>
 
@@ -109,6 +114,32 @@
     <script>
         // Inicializa os ícones do Lucide
         lucide.createIcons();
+
+        // Função para upload de avatar
+        document.getElementById('avatarInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            fetch('/upload_avatar', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.avatar_url) {
+                    document.getElementById('userAvatar').src = data.avatar_url;
+                } else {
+                    alert(data.error || 'Erro ao fazer upload do avatar');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao fazer upload do avatar');
+            });
+        });
     </script>
 </body>
 </html> 

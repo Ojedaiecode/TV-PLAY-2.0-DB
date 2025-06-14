@@ -14,10 +14,12 @@ def create_app():
     from .routes.main import main_bp    # Rotas públicas (index)
     from .routes.login import auth      # Rotas de autenticação
     from .routes.home import home_bp    # Rotas protegidas (dashboard)
+    from .routes.avatar import avatar_bp # Rotas de upload de avatar
 
     # Registro dos blueprints
     app.register_blueprint(main_bp)     # Rotas principais
     app.register_blueprint(auth)        # Rotas de autenticação
     app.register_blueprint(home_bp)     # Rotas do dashboard
+    app.register_blueprint(avatar_bp)   # Rotas de avatar
 
     return app 
