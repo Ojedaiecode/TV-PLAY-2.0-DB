@@ -1,15 +1,14 @@
 from flask import Flask
-from dotenv import load_dotenv
-import os
-
-# Carrega as variáveis de ambiente
-load_dotenv()
+from app.config import SECRET_KEY, FLASK_ENV
 
 def create_app():
     app = Flask(__name__)
     
-    # Configuração da chave secreta para sessões
-    app.secret_key = os.getenv('SECRET_KEY', 'uma-chave-secreta-temporaria')
+    # Configuração da aplicação
+    app.config.update(
+        SECRET_KEY=SECRET_KEY,
+        ENV=FLASK_ENV
+    )
 
     # Importa e registra blueprints de rotas
     from .routes.main import main_bp

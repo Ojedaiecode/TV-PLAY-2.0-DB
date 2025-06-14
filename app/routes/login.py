@@ -2,17 +2,7 @@
 # Desenvolvido para o QG Ojed AI & Code - Coronel Ojed e General Dejo
 
 from flask import Blueprint, request, session, redirect, url_for, flash, render_template
-from supabase import create_client
-import os
-from dotenv import load_dotenv
-
-# Carrega as variáveis de ambiente
-load_dotenv()
-
-# Configuração do Supabase
-supabase_url = os.getenv('SUPABASE_URL')
-supabase_key = os.getenv('SUPABASE_KEY')
-supabase = create_client(supabase_url, supabase_key)
+from app.config import supabase
 
 # Criação do Blueprint
 auth = Blueprint('auth', __name__)
