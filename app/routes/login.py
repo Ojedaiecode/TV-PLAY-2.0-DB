@@ -16,7 +16,7 @@ def login():
 
         if not email or not senha:
             flash('Por favor, preencha todos os campos.')
-            return redirect(url_for('index'))
+            return redirect(url_for('main.index'))
 
         # Consulta o usuário no Supabase
         response = supabase.table('user_admin') \
@@ -40,14 +40,20 @@ def login():
             return redirect(url_for('home_bp.home'))
         else:
             flash('Email ou senha incorretos.')
-            return redirect(url_for('index'))
+            return redirect(url_for('main.index'))
 
     except Exception as e:
         flash('Erro ao realizar login. Tente novamente.')
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
 
 @auth.route('/logout')
 def logout():
-    # Limpa a sessão
-    session.clear()
-    return redirect(url_for('index')) 
+    try:
+        # Limpa a sessão (funciona mesmo se a sessão não existir)
+        session.clear()
+    except Exception:
+        # Se houver qualquer erro, ignora e continua o logout
+        pass
+    
+    # Redireciona para a página inicial
+    return redirect(url_for('main.index')) 
