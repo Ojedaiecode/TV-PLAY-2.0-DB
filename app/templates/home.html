@@ -14,7 +14,7 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="avatar">
-                    <img src="{{ session.user.avatar_url or 'https://cdn.tvplaydastorcidas.com/logo-tv-play-00.png' }}" 
+                    <img src="{{ session.user.avatar_url if session.user.avatar_url else 'https://cdn.tvplaydastorcidas.com/logo-tv-play-00.png' }}" 
                          alt="Avatar do usuário" 
                          id="userAvatar">
                     <form id="avatarForm" style="display: none;">

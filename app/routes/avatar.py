@@ -11,6 +11,7 @@ avatar_bp = Blueprint('avatar_bp', __name__)
 
 # Extensões permitidas
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -37,17 +38,32 @@ def upload_avatar():
         if not allowed_file(file.filename):
             return jsonify({'error': 'Formato de arquivo não permitido. Use PNG, JPG ou JPEG'}), 400
 
-        # Gera o nome do arquivo baseado no ID do usuário
-        filename = secure_filename(file.filename)
-        new_filename = f"{session['user']['id']}_{filename}"
+        # Verifica o tamanho do arquivo
+        file_content = file.read()
+        file.seek(0)  # Reset do ponteiro do arquivo
+        if len(file_content) > MAX_FILE_SIZE:
+            return jsonify({'error': 'Arquivo muito grande. Máximo permitido: 5MB'}), 400
 
-        # Faz upload para o Supabase Storage
         try:
-            # Upload do arquivo para o bucket 'avatars'
+            # Gera o nome do arquivo baseado no ID do usuário
+            filename = secure_filename(file.filename)
+            new_filename = f"{session['user']['id']}_{filename}"
             file_path = f"avatars/{new_filename}"
+
+            # Tenta excluir avatar anterior se existir
+            try:
+                old_avatar_url = session['user'].get('avatar_url', '')
+                if old_avatar_url and 'avatars/' in old_avatar_url:
+                    old_file_path = old_avatar_url.split('avatars/')[-1]
+                    supabase.storage.from_('avatars').remove([old_file_path])
+            except Exception:
+                # Ignora erros ao tentar remover avatar antigo
+                pass
+
+            # Upload do novo arquivo
             supabase.storage.from_('avatars').upload(
                 file_path,
-                file.read(),
+                file_content,
                 file_options={"content-type": file.content_type}
             )
 
@@ -55,10 +71,13 @@ def upload_avatar():
             file_url = supabase.storage.from_('avatars').get_public_url(file_path)
 
             # Atualiza a URL do avatar no banco de dados
-            supabase.table('user_admin') \
+            update_result = supabase.table('user_admin') \
                 .update({'avatar_url': file_url}) \
                 .eq('id', session['user']['id']) \
                 .execute()
+
+            if not update_result.data:
+                raise Exception('Falha ao atualizar o banco de dados')
 
             # Atualiza a sessão
             session['user']['avatar_url'] = file_url
@@ -69,7 +88,10 @@ def upload_avatar():
             }), 200
 
         except Exception as e:
-            return jsonify({'error': f'Erro ao fazer upload: {str(e)}'}), 500
+            return jsonify({
+                'error': 'Erro ao fazer upload do avatar. Verifique as permissões do bucket ou tente novamente.',
+                'details': str(e)
+            }), 500
 
     except Exception as e:
         return jsonify({'error': f'Erro interno: {str(e)}'}), 500 
