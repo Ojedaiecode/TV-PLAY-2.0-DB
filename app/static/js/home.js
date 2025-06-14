@@ -1,0 +1,1 @@
+// Arquivo JavaScript preparado para funcionalidades futuras do painel administrativo 
