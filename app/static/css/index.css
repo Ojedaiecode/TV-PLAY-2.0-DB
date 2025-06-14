@@ -130,4 +130,41 @@ body {
         width: 95%;
         padding: 1.5rem;
     }
+}
+
+/* Container de senha e ícone */
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+    transition: all 0.3s ease;
+}
+
+.toggle-password svg:hover {
+    color: #333;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Ajuste do input de senha */
+.password-container input {
+    padding-right: 3rem !important;
 } 
