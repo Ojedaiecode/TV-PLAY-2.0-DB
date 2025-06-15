@@ -10,6 +10,11 @@ def create_app():
         ENV=FLASK_ENV
     )
 
+    # Configurações de segurança da sessão
+    app.config['SESSION_COOKIE_HTTPONLY'] = True
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    app.config['SESSION_COOKIE_SECURE'] = True
+
     # Importa e registra blueprints de rotas
     from .routes.main import main_bp    # Rotas públicas (index)
     from .routes.login import auth      # Rotas de autenticação
@@ -22,4 +27,4 @@ def create_app():
     app.register_blueprint(home_bp)     # Rotas do dashboard
     app.register_blueprint(avatar_bp)   # Rotas de avatar
 
-    return app 
+    return app  
