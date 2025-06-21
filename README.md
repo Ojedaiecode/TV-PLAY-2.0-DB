@@ -5,19 +5,34 @@ Este projeto é uma API escalável construída com Python e Flask, servindo como
 ## 🏗️ Estrutura do Projeto
 
 ```
-app/
-├── routes/          # Rotas organizadas por módulos
-│   ├── main.py      # Rotas públicas (index)
-│   ├── login.py     # Rotas de autenticação
-│   ├── home.py      # Rotas protegidas (dashboard)
-│   └── avatar.py    # Rotas de upload de avatar
-├── templates/       # Templates HTML (Jinja2)
-├── static/         # Arquivos estáticos
-│   ├── css/        # Estilos da aplicação
-│   └── js/         # Scripts JavaScript
-├── __init__.py     # Inicialização da aplicação Flask
-└── config.py       # Configurações da aplicação
-
+.
+├── app/                            # Diretório principal da aplicação
+│   ├── routes/                     # Rotas da aplicação
+│   │   ├── main.py                # Rotas da página inicial
+│   │   ├── login.py               # Sistema de autenticação
+│   │   ├── home.py                # Rotas do dashboard
+│   │   └── avatar.py              # Sistema de upload de avatares
+│   │
+│   ├── templates/                  # Templates HTML
+│   │   ├── index.html             # Página inicial/login
+│   │   └── home.html              # Dashboard do usuário
+│   │
+│   ├── static/                     # Arquivos estáticos
+│   │   ├── css/                   # Estilos CSS
+│   │   │   ├── index.css          # Estilos da página inicial
+│   │   │   └── home.css           # Estilos do dashboard
+│   │   │
+│   │   └── js/                    # Scripts JavaScript
+│   │       ├── index.js           # Scripts da página inicial
+│   │       └── home.js            # Scripts do dashboard
+│   │
+│   ├── __init__.py                # Inicialização do Flask e blueprints
+│   └── config.py                  # Configurações da aplicação
+│
+├── requirements.txt                # Dependências do projeto
+├── run.py                         # Arquivo de inicialização
+├── Procfile                       # Configuração para deploy no Railway
+└── .gitignore                     # Arquivos ignorados pelo git
 ```
 
 ## ✨ Funcionalidades Implementadas
@@ -83,11 +98,10 @@ O projeto utiliza variáveis de ambiente para configuração segura:
 ## 💻 Desenvolvimento
 
 O projeto segue as melhores práticas de desenvolvimento:
-- Padrão MVC
 - Código limpo e documentado
 - Modularização via Blueprints
-- TypeScript para JavaScript
-- TailwindCSS para estilos
+- JavaScript para interatividade
+- CSS puro para estilos
 
 ---
 

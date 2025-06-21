@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Usuário Grátis - QG</title>
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add-user-gratis.css') }}">
+</head>
+<body>
+    <!-- Container do formulário -->
+    <div class="add-user-container">
+        <div class="form-header">
+            <h2>Cadastrar Novo Usuário Grátis</h2>
+            <p>Preencha os dados abaixo para cadastrar um novo usuário</p>
+        </div>
+
+        <form id="addUserForm" class="add-user-form">
+            <!-- Campo Nome -->
+            <div class="form-group">
+                <label for="nome">Nome Completo</label>
+                <div class="input-wrapper">
+                    <i data-lucide="user"></i>
+                    <input type="text" id="nome" name="nome" required 
+                           placeholder="Digite o nome completo">
+                </div>
+            </div>
+
+            <!-- Campo Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <div class="input-wrapper">
+                    <i data-lucide="mail"></i>
+                    <input type="email" id="email" name="email" required 
+                           placeholder="Digite o email">
+                </div>
+            </div>
+
+            <!-- Campo Celular -->
+            <div class="form-group">
+                <label for="celular">Celular</label>
+                <div class="input-wrapper">
+                    <i data-lucide="phone"></i>
+                    <input type="text" id="celular" name="celular" required 
+                           placeholder="Digite o celular">
+                </div>
+            </div>
+
+            <!-- Campo Senha -->
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <div class="input-wrapper">
+                    <i data-lucide="lock"></i>
+                    <input type="password" id="senha" name="senha" required 
+                           placeholder="Digite a senha">
+                    <i class="toggle-password" data-lucide="eye"></i>
+                </div>
+            </div>
+
+            <!-- Botão de Submit -->
+            <button type="submit" class="btn-submit">
+                <i data-lucide="user-plus"></i>
+                Cadastrar Usuário
+            </button>
+        </form>
+
+        <!-- Área de mensagens -->
+        <div id="messageArea" class="message-area"></div>
+    </div>
+
+    <!-- Inicializa ícones do Lucide -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html> 

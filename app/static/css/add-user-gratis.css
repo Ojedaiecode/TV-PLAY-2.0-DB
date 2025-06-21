@@ -1,0 +1,156 @@
+/* 
+ * Estilos para o formulário de Adicionar Usuário Grátis
+ * QG - Quartel General
+ */
+
+.add-user-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header do formulário */
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-header h2 {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.form-header p {
+    color: #666;
+    font-size: 0.875rem;
+}
+
+/* Grupos de formulário */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    font-size: 0.875rem;
+}
+
+/* Wrapper para input com ícone */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: #000000;
+    border: 1px solid #333;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+}
+
+.input-wrapper:focus-within {
+    border-color: #6c5dd3;
+}
+
+.input-wrapper i {
+    width: 20px;
+    height: 20px;
+    margin: 0 0.75rem;
+    color: #666;
+}
+
+/* Estilo dos inputs */
+.input-wrapper input {
+    width: 100%;
+    padding: 0.75rem;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 0.875rem;
+    outline: none;
+}
+
+.input-wrapper input::placeholder {
+    color: #666;
+}
+
+/* Ícone de toggle senha */
+.toggle-password {
+    cursor: pointer;
+    margin-right: 0.75rem !important;
+}
+
+/* Botão de submit */
+.btn-submit {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #6c5dd3;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #5a4db8;
+}
+
+.btn-submit i {
+    width: 20px;
+    height: 20px;
+}
+
+/* Área de mensagens */
+.message-area {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    display: none;
+}
+
+.message-area.success {
+    display: block;
+    background-color: rgba(34, 197, 94, 0.1);
+    border: 1px solid #22c55e;
+    color: #22c55e;
+}
+
+.message-area.error {
+    display: block;
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    color: #ef4444;
+}
+
+/* Responsividade */
+@media screen and (max-width: 768px) {
+    .add-user-container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .add-user-container {
+        margin: 0.5rem;
+        padding: 1rem;
+    }
+
+    .form-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .btn-submit {
+        font-size: 0.875rem;
+    }
+} 
