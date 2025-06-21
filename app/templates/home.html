@@ -1,145 +1,23 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body>
-    <div class="container">
-        <!-- Menu Lateral -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="avatar">
-                    <img src="{{ session.user.avatar_url if session.user.avatar_url else 'https://cdn.tvplaydastorcidas.com/logo-tv-play-00.png' }}" 
-                         alt="Avatar do usuário" 
-                         id="userAvatar">
-                    <form id="avatarForm" style="display: none;">
-                        <input type="file" id="avatarInput" name="avatar" accept=".png,.jpg,.jpeg">
-                    </form>
-                </div>
-                <div class="user-info">
-                    <h3>{{ session.user.nome }}</h3>
-                    <p onclick="document.getElementById('avatarInput').click()">Editar</p>
-                </div>
-            </div>
+{% extends "base.html" %}
 
-            <div class="sidebar-menu">
-                <p class="menu-label">Menu</p>
-                <nav>
-                    <ul>
-                        <li class="active">
-                            <i data-lucide="layout-grid"></i>
-                            <span>Dashboard</span>
-                        </li>
-                        <li>
-                            <i data-lucide="user-plus"></i>
-                            <span>Add-user-assinantes</span>
-                        </li>
-                        <li>
-                            <i data-lucide="user-plus"></i>
-                            <span>Add-user-gratis</span>
-                        </li>
-                        <li>
-                            <i data-lucide="user-plus"></i>
-                            <span>Add-user-coringa</span>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </aside>
+{% block title %}Dashboard - QG{% endblock %}
 
-        <!-- Conteúdo Principal -->
-        <main class="main-content">
-            <!-- Header -->
-            <header class="top-header">
-                <div class="header-left">
-                    <h1>Dashboard</h1>
-                </div>
-                <div class="header-center">
-                    <div class="search-bar">
-                        <i data-lucide="search"></i>
-                        <input type="text" placeholder="Pesquisar...">
-                    </div>
-                </div>
-                <div class="header-right">
-                    <div class="brand">Tv Play</div>
-                    <a href="/logout" class="btn-sair">SAIR</a>
-                </div>
-            </header>
+{% block page_title %}Dashboard{% endblock %}
 
-            <!-- Grid de Cards -->
-            <div class="cards-grid">
-                <div class="card">
-                    <!-- Conteúdo do card será adicionado posteriormente -->
-                </div>
-                <div class="card">
-                    <!-- Conteúdo do card será adicionado posteriormente -->
-                </div>
-                <div class="card">
-                    <!-- Conteúdo do card será adicionado posteriormente -->
-                </div>
-                <div class="card">
-                    <!-- Conteúdo do card será adicionado posteriormente -->
-                </div>
-            </div>
-        </main>
-
-        <!-- Sidebar Direita -->
-        <aside class="right-sidebar">
-            <div class="more-options">
-                <i data-lucide="more-vertical"></i>
-            </div>
-            <div class="right-cards">
-                <div class="right-card">
-                    <!-- Conteúdo do card lateral será adicionado posteriormente -->
-                </div>
-                <div class="right-card">
-                    <!-- Conteúdo do card lateral será adicionado posteriormente -->
-                </div>
-                <div class="right-card">
-                    <!-- Conteúdo do card lateral será adicionado posteriormente -->
-                </div>
-                <div class="right-card">
-                    <!-- Conteúdo do card lateral será adicionado posteriormente -->
-                </div>
-            </div>
-        </aside>
+{% block content %}
+<!-- Grid de Cards -->
+<div class="cards-grid">
+    <div class="card">
+        <!-- Conteúdo do card será adicionado posteriormente -->
     </div>
-
-    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
-    <script>
-        // Inicializa os ícones do Lucide
-        lucide.createIcons();
-
-        // Função para upload de avatar
-        document.getElementById('avatarInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const formData = new FormData();
-            formData.append('avatar', file);
-
-            fetch('/upload_avatar', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.avatar_url) {
-                    document.getElementById('userAvatar').src = data.avatar_url;
-                } else {
-                    alert(data.error || 'Erro ao fazer upload do avatar');
-                }
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-                alert('Erro ao fazer upload do avatar');
-            });
-        });
-    </script>
-</body>
-</html> 
+    <div class="card">
+        <!-- Conteúdo do card será adicionado posteriormente -->
+    </div>
+    <div class="card">
+        <!-- Conteúdo do card será adicionado posteriormente -->
+    </div>
+    <div class="card">
+        <!-- Conteúdo do card será adicionado posteriormente -->
+    </div>
+</div>
+{% endblock %} 
