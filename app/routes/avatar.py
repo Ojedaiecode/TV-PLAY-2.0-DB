@@ -2,12 +2,15 @@
 # Desenvolvido para o QG Ojed AI & Code
 
 from flask import Blueprint, request, session, jsonify
-from app.config import supabase
+from app.services.supabase_service import get_supabase_client
 import os
 from werkzeug.utils import secure_filename
 
 # Criação do Blueprint
 avatar_bp = Blueprint('avatar_bp', __name__)
+
+# Inicializa o cliente Supabase
+supabase = get_supabase_client()
 
 # Extensões permitidas
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
