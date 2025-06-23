@@ -13,15 +13,12 @@ from dotenv import load_dotenv
 # Carrega as variáveis de ambiente
 load_dotenv()
 
-# Configurações do Supabase
+# Configurações opcionais do Supabase
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 
 if not SUPABASE_URL or not SUPABASE_KEY:
-    raise ValueError(
-        "Variáveis de ambiente SUPABASE_URL e SUPABASE_KEY são obrigatórias. "
-        "Certifique-se de que estão configuradas no ambiente ou no arquivo .env"
-    )
+    print("[AVISO] Supabase não configurado. Backend rodando sem conexão com Supabase.")
 
 # Configurações da aplicação
 SECRET_KEY = os.getenv('SECRET_KEY', os.urandom(24))
