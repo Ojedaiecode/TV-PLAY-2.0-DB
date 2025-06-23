@@ -2,11 +2,14 @@
 # Desenvolvido para o QG Ojed AI & Code - Coronel Ojed e General Dejo
 
 from flask import Blueprint, request, session, redirect, url_for, flash, render_template
-from app.config import supabase
+from app.services.supabase_service import get_supabase_client
 import bcrypt
 
 # Criação do Blueprint
 auth = Blueprint('auth', __name__)
+
+# Inicializa o cliente Supabase
+supabase = get_supabase_client()
 
 def gerar_hash_senha(senha):
     """
