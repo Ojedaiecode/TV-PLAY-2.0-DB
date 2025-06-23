@@ -5,8 +5,8 @@ from app.config import SECRET_KEY, FLASK_ENV
 def create_app():
     app = Flask(__name__)
     
-    # Habilita CORS para todas as rotas
-    CORS(app)
+    # Configura CORS apenas para o frontend oficial
+    CORS(app, origins=['https://tvplaydastorcidas.com'])
     
     # Configuração da aplicação
     app.config.update(
