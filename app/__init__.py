@@ -7,13 +7,16 @@ def create_app():
     
     # Configura CORS com parâmetros completos
     CORS(app, 
-         resources={r"/auth/*": {
-             "origins": ["https://tvplaydastorcidas.com"],
-             "methods": ["GET", "POST", "OPTIONS"],
-             "allow_headers": ["Content-Type", "Authorization"],
-             "expose_headers": ["Content-Range", "X-Content-Range"],
-             "supports_credentials": True
-         }}
+         resources={
+             r"/*": {  # Permite em todas as rotas
+                 "origins": ["https://tvplaydastorcidas.com", "https://www.tvplaydastorcidas.com"],
+                 "methods": ["GET", "POST", "OPTIONS"],
+                 "allow_headers": ["Content-Type", "Authorization"],
+                 "expose_headers": ["Content-Range", "X-Content-Range"],
+                 "supports_credentials": True,
+                 "allow_credentials": True
+             }
+         }
     )
     
     # Configuração da aplicação
