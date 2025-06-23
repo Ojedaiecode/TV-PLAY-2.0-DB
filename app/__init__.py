@@ -30,7 +30,10 @@ def create_app():
     # Configuração do CORS conforme especificado pelo General
     CORS(app,
         resources={r"/*": {
-            "origins": ["https://tvplaydastorcidas.com"],
+            "origins": [
+                "https://tvplaydastorcidas.com",
+                "https://www.tvplaydastorcidas.com"
+            ],
             "methods": ["GET", "POST", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization"],
             "supports_credentials": True
