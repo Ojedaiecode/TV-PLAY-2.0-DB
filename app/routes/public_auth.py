@@ -18,9 +18,23 @@ from flask import Blueprint, request, jsonify, make_response
 from werkzeug.security import check_password_hash
 from app.services.supabase_service import get_supabase_client
 from datetime import datetime
+from functools import wraps
 
 # Criação do Blueprint com prefixo /auth
 public_auth_bp = Blueprint('public_auth', __name__, url_prefix='/auth')
+
+def add_cors_headers(response):
+    """Adiciona os headers CORS necessários à resposta"""
+    response.headers.add('Access-Control-Allow-Origin', 'https://tvplaydastorcidas.com')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+    return response
+
+def cors_preflight():
+    """Cria uma resposta para requisições OPTIONS"""
+    response = make_response()
+    return add_cors_headers(response)
 
 @public_auth_bp.route('/login', methods=['POST', 'OPTIONS'])
 def login():
@@ -37,14 +51,9 @@ def login():
         - Erro (401): {'status': 'error', 'message': 'Email ou senha inválidos'}
         - Erro (500): {'status': 'error', 'message': 'Erro ao realizar login'}
     """
-    # Tratamento especial para requisições OPTIONS (preflight)
+    # Tratamento de preflight
     if request.method == 'OPTIONS':
-        response = make_response()
-        response.headers.add('Access-Control-Allow-Origin', 'https://tvplaydastorcidas.com')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'POST,OPTIONS')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        return response
+        return cors_preflight()
 
     try:
         # Obtém os dados do request
@@ -58,9 +67,7 @@ def login():
                 'status': 'error',
                 'message': 'Campos obrigatórios não enviados'
             })
-            response.headers.add('Access-Control-Allow-Origin', 'https://tvplaydastorcidas.com')
-            response.headers.add('Access-Control-Allow-Credentials', 'true')
-            return response, 400
+            return add_cors_headers(response), 400
 
         # Obtém o cliente do Supabase
         supabase = get_supabase_client()
@@ -77,9 +84,7 @@ def login():
                 'status': 'error',
                 'message': 'Email ou senha inválidos'
             })
-            response.headers.add('Access-Control-Allow-Origin', 'https://tvplaydastorcidas.com')
-            response.headers.add('Access-Control-Allow-Credentials', 'true')
-            return response, 401
+            return add_cors_headers(response), 401
 
         usuario = response.data[0]
 
@@ -89,9 +94,7 @@ def login():
                 'status': 'error',
                 'message': 'Email ou senha inválidos'
             })
-            response.headers.add('Access-Control-Allow-Origin', 'https://tvplaydastorcidas.com')
-            response.headers.add('Access-Control-Allow-Credentials', 'true')
-            return response, 401
+            return add_cors_headers(response), 401
 
         # Prepara os dados para atualização
         update_data = {
@@ -111,9 +114,7 @@ def login():
             'status': 'success',
             'message': 'Login realizado com sucesso'
         })
-        response.headers.add('Access-Control-Allow-Origin', 'https://tvplaydastorcidas.com')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        return response
+        return add_cors_headers(response)
 
     except Exception as e:
         # Log do erro (em produção, usar um logger apropriado)
@@ -122,6 +123,4 @@ def login():
             'status': 'error',
             'message': 'Erro ao realizar login'
         })
-        response.headers.add('Access-Control-Allow-Origin', 'https://tvplaydastorcidas.com')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        return response, 500 
+        return add_cors_headers(response), 500 

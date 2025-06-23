@@ -1,49 +1,51 @@
+"""
+Inicialização da aplicação Flask
+Desenvolvido para o QG Ojed AI & Code - General Dejo
+
+Este módulo é responsável por:
+1. Criar e configurar a aplicação Flask
+2. Registrar os blueprints
+3. Configurar middlewares e extensões
+4. Inicializar serviços externos
+"""
+
 from flask import Flask
 from flask_cors import CORS
-from app.config import SECRET_KEY, FLASK_ENV
+from dotenv import load_dotenv
+import os
+
+# Carrega as variáveis de ambiente
+load_dotenv()
 
 def create_app():
+    """
+    Cria e configura a aplicação Flask
+    
+    Returns:
+        app: Aplicação Flask configurada
+    """
+    # Cria a aplicação Flask
     app = Flask(__name__)
     
-    # Configura CORS com parâmetros completos
+    # Configuração do CORS
     CORS(app, 
          resources={
-             r"/*": {  # Permite em todas as rotas
-                 "origins": ["https://tvplaydastorcidas.com", "https://www.tvplaydastorcidas.com"],
-                 "methods": ["GET", "POST", "OPTIONS"],
-                 "allow_headers": ["Content-Type", "Authorization"],
-                 "expose_headers": ["Content-Range", "X-Content-Range"],
+             r"/auth/*": {
+                 "origins": ["https://tvplaydastorcidas.com"],
                  "supports_credentials": True,
-                 "allow_credentials": True
+                 "allow_headers": ["Content-Type"],
+                 "methods": ["POST", "OPTIONS"]
              }
-         }
-    )
+         })
     
-    # Configuração da aplicação
-    app.config.update(
-        SECRET_KEY=SECRET_KEY,
-        ENV=FLASK_ENV
-    )
-
-    # Configurações de segurança da sessão
-    app.config['SESSION_COOKIE_HTTPONLY'] = True
-    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    # Configurações da aplicação
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['SESSION_COOKIE_SECURE'] = True
-
-    # Importa e registra blueprints de rotas
-    from .routes.main import main_bp    # Rotas públicas (index)
-    from .routes.login import auth      # Rotas de autenticação
-    from .routes.home import home_bp    # Rotas protegidas (dashboard)
-    from .routes.avatar import avatar_bp # Rotas de upload de avatar
-    from .routes.usuarios_gratis import usuarios_gratis_bp  # Rotas de usuários grátis
-    from .routes.add_user_gratis_view import add_user_gratis_view_bp  # Rota para página de adicionar usuário grátis
-
-    # Registro dos blueprints
-    app.register_blueprint(main_bp)     # Rotas principais
-    app.register_blueprint(auth)        # Rotas de autenticação
-    app.register_blueprint(home_bp)     # Rotas do dashboard
-    app.register_blueprint(avatar_bp)   # Rotas de avatar
-    app.register_blueprint(usuarios_gratis_bp)  # Rotas de usuários grátis
-    app.register_blueprint(add_user_gratis_view_bp)  # Rota da página de adicionar usuário grátis
-
+    app.config['SESSION_COOKIE_HTTPONLY'] = True
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Strict'
+    
+    # Registra os blueprints
+    from app.routes.public_auth import public_auth_bp
+    app.register_blueprint(public_auth_bp)
+    
     return app  
