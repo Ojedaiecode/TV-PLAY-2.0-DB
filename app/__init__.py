@@ -5,8 +5,16 @@ from app.config import SECRET_KEY, FLASK_ENV
 def create_app():
     app = Flask(__name__)
     
-    # Configura CORS apenas para o frontend oficial
-    CORS(app, origins=['https://tvplaydastorcidas.com'])
+    # Configura CORS com parâmetros completos
+    CORS(app, 
+         resources={r"/auth/*": {
+             "origins": ["https://tvplaydastorcidas.com"],
+             "methods": ["GET", "POST", "OPTIONS"],
+             "allow_headers": ["Content-Type", "Authorization"],
+             "expose_headers": ["Content-Range", "X-Content-Range"],
+             "supports_credentials": True
+         }}
+    )
     
     # Configuração da aplicação
     app.config.update(
