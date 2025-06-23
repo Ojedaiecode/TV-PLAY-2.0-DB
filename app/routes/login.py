@@ -1,12 +1,12 @@
 # Arquivo responsável pelas rotas de autenticação (login e logout)
 # Desenvolvido para o QG Ojed AI & Code - Coronel Ojed e General Dejo
 
-from flask import Blueprint, request, session, redirect, url_for, flash, render_template
+from flask import Blueprint, request, session, redirect, url_for, flash, render_template, jsonify
 from app.services.supabase_service import get_supabase_client
 import bcrypt
 
 # Criação do Blueprint
-auth = Blueprint('auth', __name__)
+login_bp = Blueprint('login', __name__)
 
 # Inicializa o cliente Supabase
 supabase = get_supabase_client()
@@ -29,8 +29,12 @@ def verificar_senha(senha_digitada, hash_senha):
     except Exception:
         return False
 
-@auth.route('/login', methods=['POST'])
+@login_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    # Rota GET para teste
+    if request.method == 'GET':
+        return jsonify({"message": "Rota de login funcionando no backend!"})
+    
     try:
         # Recebe os dados do formulário
         email = request.form.get('email')
@@ -72,7 +76,7 @@ def login():
         flash('Erro ao realizar login. Tente novamente.')
         return redirect(url_for('main.index'))
 
-@auth.route('/logout')
+@login_bp.route('/logout')
 def logout():
     try:
         # Limpa a sessão (funciona mesmo se a sessão não existir)
