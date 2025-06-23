@@ -1,10 +1,18 @@
+"""
+Configurações da aplicação Flask
+Desenvolvido para o QG Ojed AI & Code - General Dejo
+
+Este módulo centraliza todas as configurações da aplicação,
+incluindo variáveis de ambiente, conexões com serviços externos
+e outras configurações globais.
+"""
+
 import os
 from supabase import create_client
 from dotenv import load_dotenv
 
-# Carrega as variáveis de ambiente apenas em ambiente de desenvolvimento
-if os.getenv('FLASK_ENV') != 'production':
-    load_dotenv()
+# Carrega as variáveis de ambiente
+load_dotenv()
 
 # Configurações do Supabase
 supabase_url = os.getenv('SUPABASE_URL')
@@ -19,6 +27,6 @@ if not supabase_url or not supabase_key:
 # Inicializa o cliente Supabase
 supabase = create_client(supabase_url, supabase_key)
 
-# Outras configurações da aplicação
+# Configurações da aplicação
 SECRET_KEY = os.getenv('SECRET_KEY', os.urandom(24))
-FLASK_ENV = os.getenv('FLASK_ENV', 'development') 
+FLASK_ENV = os.getenv('FLASK_ENV', 'production')  # Default para production 
