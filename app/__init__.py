@@ -31,7 +31,10 @@ def create_app():
     CORS(app, 
          resources={
              r"/auth/*": {
-                 "origins": ["https://tvplaydastorcidas.com"],
+                 "origins": [
+                     "https://tvplaydastorcidas.com",
+                     "https://www.tvplaydastorcidas.com"
+                 ],
                  "supports_credentials": True,
                  "allow_headers": ["Content-Type"],
                  "methods": ["POST", "OPTIONS"]

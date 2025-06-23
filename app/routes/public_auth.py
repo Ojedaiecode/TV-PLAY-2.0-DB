@@ -25,7 +25,19 @@ public_auth_bp = Blueprint('public_auth', __name__, url_prefix='/auth')
 
 def add_cors_headers(response):
     """Adiciona os headers CORS necessários à resposta"""
-    response.headers.add('Access-Control-Allow-Origin', 'https://tvplaydastorcidas.com')
+    # Verifica o Origin da requisição
+    origin = request.headers.get('Origin', '')
+    allowed_origins = [
+        'https://tvplaydastorcidas.com',
+        'https://www.tvplaydastorcidas.com'
+    ]
+    
+    # Define o Origin correto baseado na requisição
+    if origin in allowed_origins:
+        response.headers.add('Access-Control-Allow-Origin', origin)
+    else:
+        response.headers.add('Access-Control-Allow-Origin', allowed_origins[0])
+        
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
     response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
