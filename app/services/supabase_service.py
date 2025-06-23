@@ -6,7 +6,7 @@ genéricas para serem utilizadas em qualquer rota que precise
 interagir com o banco de dados.
 """
 from supabase import create_client
-from app.config import supabase_url, supabase_key
+from app.config import SUPABASE_URL, SUPABASE_KEY
 
 def get_supabase_client():
     """
@@ -15,4 +15,4 @@ def get_supabase_client():
     Returns:
         Client: Cliente do Supabase configurado com as credenciais do ambiente
     """
-    return create_client(supabase_url, supabase_key) 
+    return create_client(SUPABASE_URL, SUPABASE_KEY) 
