@@ -18,13 +18,13 @@
             </div>
             
             <form class="login-form" action="/login" method="POST">
-                {% if mensagem %}
-                    <p class="error-message">{{ mensagem }}</p>
-                {% endif %}
-                
-                <div class="form-group">
-                    <input type="text" placeholder="Nome" required>
-                </div>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="error-message">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
                 
                 <div class="form-group">
                     <input type="email" name="email" placeholder="Email" required>

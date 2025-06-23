@@ -28,28 +28,8 @@ def create_app():
         # Cria a aplicação Flask
         app = Flask(__name__)
         
-        # Configuração do CORS para permitir tanto o site público quanto o painel admin
-        CORS(app,
-            resources={
-                # Configuração para rotas públicas
-                r"/auth/*": {
-                    "origins": [
-                        "https://tvplaydastorcidas.com",
-                        "https://www.tvplaydastorcidas.com"
-                    ],
-                    "methods": ["GET", "POST", "OPTIONS"],
-                    "allow_headers": ["Content-Type", "Authorization"],
-                    "supports_credentials": True
-                },
-                # Configuração para o painel admin
-                r"/*": {
-                    "origins": ["*"],  # Permite temporariamente todas as origens para o painel admin
-                    "methods": ["GET", "POST", "OPTIONS"],
-                    "allow_headers": ["Content-Type", "Authorization"],
-                    "supports_credentials": True
-                }
-            }
-        )
+        # Configuração do CORS para permitir acesso ao painel admin
+        CORS(app, supports_credentials=True)
         
         # Configurações da aplicação
         app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -73,11 +53,6 @@ def create_app():
         app.register_blueprint(avatar_bp)
         app.register_blueprint(usuarios_gratis_bp)
         app.register_blueprint(add_user_gratis_bp)
-        
-        # Rota principal do painel admin
-        @app.route('/')
-        def index():
-            return render_template('index.html')
         
         # Rota de healthcheck
         @app.route('/health')
