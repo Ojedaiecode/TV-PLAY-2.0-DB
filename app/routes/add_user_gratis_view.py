@@ -4,9 +4,9 @@
 from flask import Blueprint, render_template, session, redirect, url_for
 
 # Criação do Blueprint
-add_user_gratis_view_bp = Blueprint('add_user_gratis_view_bp', __name__)
+add_user_gratis_bp = Blueprint('add_user_gratis', __name__)
 
-@add_user_gratis_view_bp.route('/add-user-gratis')
+@add_user_gratis_bp.route('/add-user-gratis')
 def add_user_gratis():
     # Verifica se existe uma sessão ativa
     if 'user' in session:
