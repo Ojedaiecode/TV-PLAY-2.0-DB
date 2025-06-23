@@ -9,7 +9,7 @@ Este módulo é responsável por:
 4. Inicializar serviços externos
 """
 
-from flask import Flask
+from flask import Flask, request, make_response
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
@@ -27,19 +27,23 @@ def create_app():
     # Cria a aplicação Flask
     app = Flask(__name__)
     
-    # Configuração do CORS
-    CORS(app, 
-         resources={
-             r"/auth/*": {
-                 "origins": [
-                     "https://tvplaydastorcidas.com",
-                     "https://www.tvplaydastorcidas.com"
-                 ],
-                 "supports_credentials": True,
-                 "allow_headers": ["Content-Type"],
-                 "methods": ["POST", "OPTIONS"]
-             }
-         })
+    # Configuração do CORS conforme especificado pelo General
+    CORS(
+        app, 
+        resources={r"/*": {"origins": "https://tvplaydastorcidas.com"}}, 
+        supports_credentials=True
+    )
+    
+    # Handler manual para requisições OPTIONS
+    @app.before_request
+    def handle_options():
+        if request.method == 'OPTIONS':
+            response = make_response()
+            response.headers['Access-Control-Allow-Origin'] = 'https://tvplaydastorcidas.com'
+            response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+            response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+            response.status_code = 200
+            return response
     
     # Configurações da aplicação
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
