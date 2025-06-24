@@ -9,13 +9,7 @@ Este módulo é responsável por:
 4. Inicializar serviços externos
 """
 
-from flask import Flask, jsonify, render_template
-from flask_cors import CORS
-from dotenv import load_dotenv
-import os
-
-# Carrega as variáveis de ambiente
-load_dotenv()
+from flask import Flask, render_template
 
 def create_app():
     """
@@ -24,46 +18,11 @@ def create_app():
     Returns:
         app: Aplicação Flask configurada
     """
-    try:
-        # Cria a aplicação Flask
-        app = Flask(__name__)
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = 'dev'
+    
+    @app.route('/')
+    def index():
+        return render_template('index.html')
         
-        # Configuração do CORS para permitir acesso ao painel admin
-        CORS(app, supports_credentials=True)
-        
-        # Configurações da aplicação
-        app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-        app.config['SESSION_COOKIE_SECURE'] = True
-        app.config['SESSION_COOKIE_HTTPONLY'] = True
-        app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Alterado para Lax para permitir redirecionamentos
-        
-        # Registra todos os blueprints necessários
-        from app.routes.public_auth import public_auth_bp
-        from app.routes.main import main_bp
-        from app.routes.login import login_bp
-        from app.routes.home import home_bp
-        from app.routes.avatar import avatar_bp
-        from app.routes.usuarios_gratis import usuarios_gratis_bp
-        from app.routes.add_user_gratis_view import add_user_gratis_bp
-        
-        app.register_blueprint(public_auth_bp)
-        app.register_blueprint(main_bp)
-        app.register_blueprint(login_bp)
-        app.register_blueprint(home_bp)
-        app.register_blueprint(avatar_bp)
-        app.register_blueprint(usuarios_gratis_bp)
-        app.register_blueprint(add_user_gratis_bp)
-        
-        # Rota de healthcheck
-        @app.route('/health')
-        def health_check():
-            return jsonify({
-                'status': 'healthy',
-                'message': 'API TV Play das Torcidas está operacional'
-            })
-        
-        return app
-        
-    except Exception as e:
-        print(f"Erro crítico na inicialização do app: {str(e)}")
-        raise  
+    return app 
