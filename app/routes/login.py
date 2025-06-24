@@ -34,12 +34,30 @@ def gerar_hash_senha(senha):
 def verificar_senha(senha_digitada, hash_senha):
     """
     Verifica se a senha digitada corresponde ao hash armazenado
+    Aceita tanto hashes $2a$ quanto $2b$
     """
     try:
         logger.info(f"Tentando verificar senha. Hash armazenado: {hash_senha[:20]}...")
         senha_bytes = senha_digitada.encode('utf-8')
         hash_bytes = hash_senha.encode('utf-8')
-        return bcrypt.checkpw(senha_bytes, hash_bytes)
+        
+        # Tenta verificar normalmente primeiro
+        try:
+            return bcrypt.checkpw(senha_bytes, hash_bytes)
+        except Exception as e1:
+            logger.warning(f"Primeira tentativa de verificação falhou: {str(e1)}")
+            
+            # Se falhou e o hash começa com $2a$, tenta converter para $2b$
+            if hash_senha.startswith('$2a$'):
+                try:
+                    hash_modificado = hash_senha.replace('$2a$', '$2b$', 1)
+                    hash_bytes_mod = hash_modificado.encode('utf-8')
+                    return bcrypt.checkpw(senha_bytes, hash_bytes_mod)
+                except Exception as e2:
+                    logger.error(f"Tentativa de verificação com hash modificado falhou: {str(e2)}")
+                    return False
+            return False
+            
     except Exception as e:
         logger.error(f"Erro ao verificar senha: {str(e)}")
         return False
