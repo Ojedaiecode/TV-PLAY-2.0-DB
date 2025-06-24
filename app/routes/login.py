@@ -94,7 +94,7 @@ def login():
 
         # Se chegou aqui, usa o Supabase normalmente
         logger.info(f"Tentando login para email: {email}")
-        response = supabase.table('user_admin') \
+        response = supabase.table('usuario_admin') \
             .select('id, nome, email, senha, avatar_url') \
             .eq('email', email) \
             .execute()
@@ -150,7 +150,7 @@ def atualizar_senha_usuario(user_id, nova_senha):
     """
     try:
         senha_hash = gerar_hash_senha(nova_senha)
-        supabase.table('user_admin') \
+        supabase.table('usuario_admin') \
             .update({'senha': senha_hash}) \
             .eq('id', user_id) \
             .execute()
