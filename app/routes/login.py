@@ -14,15 +14,6 @@ logger = logging.getLogger(__name__)
 # Criação do Blueprint
 login_bp = Blueprint('login', __name__)
 
-# Tenta inicializar o cliente Supabase
-try:
-    supabase = get_supabase_client()
-    if not supabase:
-        logger.error("Falha ao inicializar cliente Supabase")
-except Exception as e:
-    logger.error(f"Erro ao conectar com Supabase: {str(e)}")
-    supabase = None
-
 def gerar_hash_senha(senha):
     """
     Gera um hash bcrypt para a senha fornecida
@@ -80,10 +71,16 @@ def login():
             flash('Por favor, preencha todos os campos.')
             return redirect(url_for('main.index'))
 
-        # Verifica se o Supabase está configurado
-        if not supabase:
-            logger.error("Supabase não está configurado")
-            flash('Erro de configuração no servidor.')
+        # Tenta inicializar o cliente Supabase
+        try:
+            supabase = get_supabase_client()
+            if not supabase:
+                logger.error("Falha ao inicializar cliente Supabase - Credenciais ausentes ou inválidas")
+                flash('Erro de configuração no servidor. Por favor, contate o suporte.')
+                return redirect(url_for('main.index'))
+        except Exception as e:
+            logger.error(f"Erro ao conectar com Supabase: {str(e)}")
+            flash('Erro de conexão com o servidor. Por favor, tente novamente.')
             return redirect(url_for('main.index'))
 
         # Busca o usuário no Supabase
@@ -145,6 +142,11 @@ def atualizar_senha_usuario(user_id, nova_senha):
     """
     try:
         senha_hash = gerar_hash_senha(nova_senha)
+        # Obtém uma nova conexão com o Supabase
+        supabase = get_supabase_client()
+        if not supabase:
+            return False
+            
         supabase.table('usuario_admin') \
             .update({'senha': senha_hash}) \
             .eq('id', user_id) \
