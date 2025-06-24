@@ -35,11 +35,11 @@ def get_supabase_client():
         
         # Testa a conexão fazendo uma query simples
         try:
-            client.table('user_admin').select("count", "exact").execute()
+            client.table('usuario_admin').select("count", "exact").execute()
             logger.info("Conexão com Supabase estabelecida com sucesso")
             return client
         except Exception as table_error:
-            logger.error("Erro ao acessar tabela user_admin: %s", str(table_error))
+            logger.error("Erro ao acessar tabela usuario_admin: %s", str(table_error))
             return None
             
     except Exception as e:
