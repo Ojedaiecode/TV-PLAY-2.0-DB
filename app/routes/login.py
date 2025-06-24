@@ -72,10 +72,11 @@ def login():
     
     try:
         # Recebe os dados do formulário
+        nome = request.form.get('nome')
         email = request.form.get('email')
         senha = request.form.get('senha')
 
-        if not email or not senha:
+        if not nome or not email or not senha:
             flash('Por favor, preencha todos os campos.')
             return redirect(url_for('main.index'))
 
@@ -86,16 +87,17 @@ def login():
             return redirect(url_for('main.index'))
 
         # Busca o usuário no Supabase
-        logger.info(f"Tentando login para email: {email}")
+        logger.info(f"Tentando login para usuário: {nome} ({email})")
         response = supabase.table('usuario_admin') \
             .select('id, nome, email, senha, avatar_url') \
             .eq('email', email) \
+            .eq('nome', nome) \
             .execute()
 
         # Verifica se encontrou o usuário
         if response.data and len(response.data) > 0:
             user = response.data[0]
-            logger.info(f"Usuário encontrado: {user['email']}")
+            logger.info(f"Usuário encontrado: {user['nome']} ({user['email']})")
             
             # Verifica a senha usando bcrypt
             if verificar_senha(senha, user['senha']):
@@ -111,11 +113,11 @@ def login():
                 return redirect(url_for('home_bp.home'))
             else:
                 logger.warning("Falha na verificação da senha")
-                flash('Email ou senha incorretos.')
+                flash('Nome, email ou senha incorretos.')
                 return redirect(url_for('main.index'))
         else:
-            logger.warning(f"Usuário não encontrado para o email: {email}")
-            flash('Email ou senha incorretos.')
+            logger.warning(f"Usuário não encontrado para: {nome} ({email})")
+            flash('Nome, email ou senha incorretos.')
             return redirect(url_for('main.index'))
 
     except Exception as e:
