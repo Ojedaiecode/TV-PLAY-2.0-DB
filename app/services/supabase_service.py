@@ -35,7 +35,8 @@ def get_supabase_client():
         
         # Testa a conexão fazendo uma query simples
         try:
-            client.table('usuario_admin').select("count", "exact").execute()
+            # Testa apenas se consegue acessar a tabela
+            client.table('usuario_admin').select('count').execute()
             logger.info("Conexão com Supabase estabelecida com sucesso")
             return client
         except Exception as table_error:
