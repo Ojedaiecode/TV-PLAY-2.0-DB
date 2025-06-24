@@ -17,9 +17,11 @@ login_bp = Blueprint('login', __name__)
 # Tenta inicializar o cliente Supabase
 try:
     supabase = get_supabase_client()
-except Exception:
+    if not supabase:
+        logger.error("Falha ao inicializar cliente Supabase")
+except Exception as e:
+    logger.error(f"Erro ao conectar com Supabase: {str(e)}")
     supabase = None
-    logger.error("Supabase não configurado. Usando modo de desenvolvimento.")
 
 def gerar_hash_senha(senha):
     """
@@ -77,22 +79,13 @@ def login():
             flash('Por favor, preencha todos os campos.')
             return redirect(url_for('main.index'))
 
-        # Se o Supabase não estiver configurado, usa modo de desenvolvimento
+        # Verifica se o Supabase está configurado
         if not supabase:
-            # Credenciais temporárias para desenvolvimento
-            if email == "admin@admin.com" and senha == "admin":
-                session['user'] = {
-                    'id': 1,
-                    'nome': 'Admin',
-                    'email': email,
-                    'avatar_url': None
-                }
-                return redirect(url_for('home_bp.home'))
-            else:
-                flash('Email ou senha incorretos.')
-                return redirect(url_for('main.index'))
+            logger.error("Supabase não está configurado")
+            flash('Erro de configuração no servidor.')
+            return redirect(url_for('main.index'))
 
-        # Se chegou aqui, usa o Supabase normalmente
+        # Busca o usuário no Supabase
         logger.info(f"Tentando login para email: {email}")
         response = supabase.table('usuario_admin') \
             .select('id, nome, email, senha, avatar_url') \
