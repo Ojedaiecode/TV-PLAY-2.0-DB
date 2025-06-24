@@ -4,12 +4,17 @@
 from flask import Blueprint, request, session, redirect, url_for, flash, render_template, jsonify
 from app.services.supabase_service import get_supabase_client
 import bcrypt
+import os
 
 # Criação do Blueprint
 login_bp = Blueprint('login', __name__)
 
-# Inicializa o cliente Supabase
-supabase = get_supabase_client()
+# Tenta inicializar o cliente Supabase
+try:
+    supabase = get_supabase_client()
+except Exception:
+    supabase = None
+    print("[AVISO] Supabase não configurado. Usando modo de desenvolvimento.")
 
 def gerar_hash_senha(senha):
     """
@@ -44,7 +49,22 @@ def login():
             flash('Por favor, preencha todos os campos.')
             return redirect(url_for('main.index'))
 
-        # Consulta o usuário no Supabase
+        # Se o Supabase não estiver configurado, usa modo de desenvolvimento
+        if not supabase:
+            # Credenciais temporárias para desenvolvimento
+            if email == "admin@admin.com" and senha == "admin":
+                session['user'] = {
+                    'id': 1,
+                    'nome': 'Admin',
+                    'email': email,
+                    'avatar_url': None
+                }
+                return redirect(url_for('home_bp.home'))
+            else:
+                flash('Email ou senha incorretos.')
+                return redirect(url_for('main.index'))
+
+        # Se chegou aqui, usa o Supabase normalmente
         response = supabase.table('user_admin') \
             .select('id, nome, email, senha, avatar_url') \
             .eq('email', email) \

@@ -14,4 +14,4 @@ def home():
         return render_template('home.html')
     
     # Se não houver sessão, redireciona para a página inicial
-    return redirect(url_for('index')) 
+    return redirect(url_for('main.index')) 
