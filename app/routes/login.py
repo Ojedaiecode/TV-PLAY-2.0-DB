@@ -5,6 +5,11 @@ from flask import Blueprint, request, session, redirect, url_for, flash, render_
 from app.services.supabase_service import get_supabase_client
 import bcrypt
 import os
+import logging
+
+# Configuração do logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Criação do Blueprint
 login_bp = Blueprint('login', __name__)
@@ -14,24 +19,29 @@ try:
     supabase = get_supabase_client()
 except Exception:
     supabase = None
-    print("[AVISO] Supabase não configurado. Usando modo de desenvolvimento.")
+    logger.error("Supabase não configurado. Usando modo de desenvolvimento.")
 
 def gerar_hash_senha(senha):
     """
     Gera um hash bcrypt para a senha fornecida
     """
-    return bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    try:
+        return bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    except Exception as e:
+        logger.error(f"Erro ao gerar hash: {str(e)}")
+        return None
 
 def verificar_senha(senha_digitada, hash_senha):
     """
     Verifica se a senha digitada corresponde ao hash armazenado
     """
     try:
-        return bcrypt.checkpw(
-            senha_digitada.encode('utf-8'),
-            hash_senha.encode('utf-8')
-        )
-    except Exception:
+        logger.info(f"Tentando verificar senha. Hash armazenado: {hash_senha[:20]}...")
+        senha_bytes = senha_digitada.encode('utf-8')
+        hash_bytes = hash_senha.encode('utf-8')
+        return bcrypt.checkpw(senha_bytes, hash_bytes)
+    except Exception as e:
+        logger.error(f"Erro ao verificar senha: {str(e)}")
         return False
 
 @login_bp.route('/login', methods=['GET', 'POST'])
@@ -65,6 +75,7 @@ def login():
                 return redirect(url_for('main.index'))
 
         # Se chegou aqui, usa o Supabase normalmente
+        logger.info(f"Tentando login para email: {email}")
         response = supabase.table('user_admin') \
             .select('id, nome, email, senha, avatar_url') \
             .eq('email', email) \
@@ -73,9 +84,11 @@ def login():
         # Verifica se encontrou o usuário
         if response.data and len(response.data) > 0:
             user = response.data[0]
+            logger.info(f"Usuário encontrado: {user['email']}")
             
             # Verifica a senha usando bcrypt
             if verificar_senha(senha, user['senha']):
+                logger.info("Senha verificada com sucesso")
                 # Cria a sessão do usuário (removendo a senha dos dados da sessão)
                 session['user'] = {
                     'id': user['id'],
@@ -86,13 +99,16 @@ def login():
                 
                 return redirect(url_for('home_bp.home'))
             else:
+                logger.warning("Falha na verificação da senha")
                 flash('Email ou senha incorretos.')
                 return redirect(url_for('main.index'))
         else:
+            logger.warning(f"Usuário não encontrado para o email: {email}")
             flash('Email ou senha incorretos.')
             return redirect(url_for('main.index'))
 
     except Exception as e:
+        logger.error(f"Erro no processo de login: {str(e)}")
         flash('Erro ao realizar login. Tente novamente.')
         return redirect(url_for('main.index'))
 
