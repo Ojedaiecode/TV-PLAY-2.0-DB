@@ -1,23 +1,43 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - QG</title>
+    <!-- CSS Base -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Header com Título e Botão Sair -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="brand">Tv Play</div>
+                    <a href="/logout" class="btn-sair">SAIR</a>
+                </div>
+            </header>
 
-{% block title %}Dashboard - QG{% endblock %}
-
-{% block page_title %}Dashboard{% endblock %}
-
-{% block content %}
-<!-- Grid de Cards -->
-<div class="cards-grid">
-    <div class="card">
-        <!-- Conteúdo do card será adicionado posteriormente -->
+            <!-- Grid de Cards -->
+            <div class="cards-grid">
+                <div class="card">
+                    <!-- Conteúdo do card será adicionado posteriormente -->
+                </div>
+                <div class="card">
+                    <!-- Conteúdo do card será adicionado posteriormente -->
+                </div>
+                <div class="card">
+                    <!-- Conteúdo do card será adicionado posteriormente -->
+                </div>
+                <div class="card">
+                    <!-- Conteúdo do card será adicionado posteriormente -->
+                </div>
+            </div>
+        </main>
     </div>
-    <div class="card">
-        <!-- Conteúdo do card será adicionado posteriormente -->
-    </div>
-    <div class="card">
-        <!-- Conteúdo do card será adicionado posteriormente -->
-    </div>
-    <div class="card">
-        <!-- Conteúdo do card será adicionado posteriormente -->
-    </div>
-</div>
-{% endblock %} 
+</body>
+</html> 
