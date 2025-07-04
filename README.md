@@ -105,4 +105,4 @@ O projeto segue as melhores práticas de desenvolvimento:
 
 ---
 
-> **Nota:** O projeto está totalmente funcional e pronto para produção, com todas as funcionalidades de autenticação, banco de dados e interface implementadas e testadas. 
+> **Nota:** O projeto está totalmente funcional e pronto para produção, com todas as funcionalidades de autenticação, banco de dados e interface implementadas e testadas. # trigger redeploy limpo no Railway
