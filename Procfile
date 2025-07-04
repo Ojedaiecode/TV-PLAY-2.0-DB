@@ -1,1 +1,1 @@
-web: gunicorn teste_vida:app
+web: gunicorn teste_api.teste_vida:app
